@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "awsservices"
+version = "0.1.0"
+description = ""
+authors = ["Vimit <talk2vimit@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^5.0.2"
+django-restframework = "^0.0.1"
+Markdown = "^3.5.2"
+Jinja2 = "^3.1.3"
+psycopg-binary = "^3.1.18"
+psycopg2-binary = "^2.9.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
