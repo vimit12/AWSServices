@@ -267,3 +267,5 @@ pyrightconfig.json
 
 #Docker volumes
 pgdatavolume/
+
+*/.DS_Store

@@ -1,0 +1,78 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "username",
+        "email",
+        "password",
+        "name",
+        "profile"
+    ],
+    "properties": {
+        "username": {
+            "type": "string",
+            "default": "",
+            "title": "The username Schema",
+            "examples": [
+                "john_doe"
+            ]
+        },
+        "email": {
+            "type": "string",
+            "default": "",
+            "title": "The email Schema",
+            "examples": [
+                "john_doe@example.com"
+            ]
+        },
+        "password": {
+            "type": "string",
+            "default": "",
+            "title": "The password Schema",
+            "examples": [
+                "password123"
+            ]
+        },
+        "name": {
+            "type": "string",
+            "default": "",
+            "title": "The name Schema",
+            "examples": [
+                "John Doe"
+            ]
+        },
+        "profile": {
+            "type": "object",
+            "default": {},
+            "title": "The profile Schema",
+            "required": [
+                "mobile"
+            ],
+            "properties": {
+                "mobile": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The mobile Schema",
+                    "examples": [
+                        "9971572155"
+                    ]
+                }
+            },
+            "examples": [{
+                "mobile": "9971572155"
+            }]
+        }
+    },
+    "examples": [{
+        "username": "john_doe",
+        "email": "john_doe@example.com",
+        "password": "password123",
+        "name": "John Doe",
+        "profile": {
+            "mobile": "9971572155"
+        }
+    }]
+}

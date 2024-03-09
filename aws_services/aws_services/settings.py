@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    "ec2_services",
+    "init_service",
+    "lambda_services",
+    "s3_services",
 ]
 
 MIDDLEWARE = [

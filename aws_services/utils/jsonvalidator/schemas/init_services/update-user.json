@@ -1,0 +1,93 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "name",
+        "mobile",
+        "department"
+    ],
+    "properties": {
+        "name": {
+            "type": "string",
+            "default": "",
+            "title": "The name Schema",
+            "examples": [
+                "john_dodw"
+            ]
+        },
+        "mobile": {
+            "type": "string",
+            "default": "",
+            "title": "The mobile Schema",
+            "examples": [
+                "9999999999"
+            ]
+        },
+        "department": {
+            "type": "object",
+            "default": {},
+            "title": "The department Schema",
+            "required": [
+                "department_name",
+                "accounts"
+            ],
+            "properties": {
+                "department_name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The department_name Schema",
+                    "examples": [
+                        "Cloud"
+                    ]
+                },
+                "accounts": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The accounts Schema",
+                    "items": {
+                        "type": "string",
+                        "title": "A Schema",
+                        "examples": [
+                            "abc",
+                            "user",
+                            "xyz",
+                            "Novartis"
+                        ]
+                    },
+                    "examples": [
+                        ["abc",
+                            "user",
+                            "xyz",
+                            "Novartis"
+                        ]
+                    ]
+                }
+            },
+            "examples": [{
+                "department_name": "Cloud",
+                "accounts": [
+                    "abc",
+                    "user",
+                    "xyz",
+                    "Novartis"
+                ]
+            }]
+        }
+    },
+    "examples": [{
+        "name": "john_dodw",
+        "mobile": "9999999999",
+        "department": {
+            "department_name": "Cloud",
+            "accounts": [
+                "abc",
+                "user",
+                "xyz",
+                "Novartis"
+            ]
+        }
+    }]
+}
