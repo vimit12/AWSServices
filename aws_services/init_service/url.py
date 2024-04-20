@@ -7,6 +7,7 @@ from .views import (
     SignUp,
     UpdateUserProfile,
     UserNameAPI,
+    RefreshTokeAPI,
 )
 
 urlpatterns = [
@@ -14,6 +15,7 @@ urlpatterns = [
     path("api/username/", UserNameAPI.as_view()),
     path("api/login/", LoginAPI.as_view()),
     path("api/logout/", LogoutAPI.as_view()),
+    path("api/refresh/", RefreshTokeAPI.as_view()),
     path("api/user_list/", GetAllUser.as_view()),
     path("api/user_update/", UpdateUserProfile.as_view()),
 ]

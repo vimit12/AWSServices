@@ -1,0 +1,83 @@
+#:TODO create a super user at intialization of project.
+
+#Super User data -
+
+{
+    "user": {
+        "username": "vimit12",
+        "email": "vimit@admin.com",
+        "password": "1234",
+        "name": "Vimit",
+        "is_active":true,
+        "is_staff": true,
+        "is_superuser": true
+    },
+    "aws_user": {
+        "mobile": "9999999999",
+        "login_status": true
+    },
+    "role_id": {
+        "role_name": "admin",
+        "role_status": true
+    },
+    "user_screen": {
+        "screens": {
+            "S3": ["Create Bucket",
+                "Manage Buckets",
+                "Upload Objects",
+                "Download Objects",
+                "Permissions",
+                "Lifecycle Policies",
+                "Versioning",
+                "Static Website Hosting",
+                "Logging",
+                "Cross-Region Replication"
+            ],
+            "EC2": ["Launch Instances",
+                "Manage Instances",
+                "Security Groups",
+                "Key Pairs",
+                "Elastic IP Addresses",
+                "Instance Metadata",
+                "Instance Storage",
+                "Instance Types",
+                "Tags",
+                "Monitoring"
+            ],
+            "RDS": ["Create DB Instance",
+                "Manage DB Instances",
+                "Snapshots",
+                "Security Groups",
+                "Parameter Groups",
+                "Encryption",
+                "Backup and Restore",
+                "Monitoring",
+                "Read Replicas",
+                "Performance Insights"
+            ],
+            "Lambda": [
+                "Create Function",
+                "Manage Functions",
+                "Function Triggers",
+                "Environment Variables",
+                "Concurrency",
+                "Permissions",
+                "Logging",
+                "Monitoring",
+                "Testing"
+            ],
+            "Route53": [
+                "Create Hosted Zone",
+                "Manage Hosted Zones",
+                "Domain Registration",
+                "Record Sets",
+                "Health Checks",
+                "Traffic Flow Policies",
+                "Resolver Endpoints",
+                "DNSSEC",
+                "Routing Policies",
+                "Monitoring"
+            ]
+        }
+    }
+}

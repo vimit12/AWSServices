@@ -9,7 +9,7 @@ class TokenGeneration:
     @classmethod
     def generate_access_token(cls) -> dict:
         # Generate a random token using oauthlib
-        token = generate_token(length=128)
+        token = generate_token(length=256)
 
         # Set the token expiry time (in seconds)
         expires_in = 300
@@ -21,13 +21,13 @@ class TokenGeneration:
         return {
             "token": token,
             "expires_in": expires_in,
-            "expires": str(int(expires.timestamp())),
+            "expires": int(expires.timestamp()),
         }
 
     @classmethod
     def generate_refresh_token(cls) -> dict:
         # Generate a random token using oauthlib
-        token = generate_token(length=256)
+        token = generate_token(length=512)
 
         # Set the token expiry time (in seconds)
         expires_in = 3600
@@ -39,5 +39,5 @@ class TokenGeneration:
         return {
             "token": token,
             "expires_in": expires_in,
-            "expires": str(int(expires.timestamp())),
+            "expires": int(expires.timestamp()),
         }

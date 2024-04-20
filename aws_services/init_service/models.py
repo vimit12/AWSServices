@@ -34,6 +34,7 @@ class Role(CommonItems):
         ("cloud basic", "Cloud Basic"),
         ("cloud manager", "Cloud Manager"),
         ("cloud expert", "Cloud Expert"),
+        ("others", "Others"),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -112,8 +113,8 @@ class AWSUser(CommonItems):
             if self.role_id
             else {},
             "user_screens": {
-                "id": str(self.screens.id),
-                "user_screen": self.screens.user_screen,
+                "id": str(self.role_id.screens.id),
+                "user_screen": self.role_id.screens.user_screen,
             }
             if self.role_id
             else {},

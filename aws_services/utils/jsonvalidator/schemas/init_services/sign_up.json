@@ -5,51 +5,70 @@
     "default": {},
     "title": "Root Schema",
     "required": [
-        "username",
-        "email",
-        "password",
-        "name",
-        "profile"
+        "user",
+        "aws_user",
+        "role_id",
+        "user_screen"
     ],
     "properties": {
-        "username": {
-            "type": "string",
-            "default": "",
-            "title": "The username Schema",
-            "examples": [
-                "john_doe"
-            ]
-        },
-        "email": {
-            "type": "string",
-            "default": "",
-            "title": "The email Schema",
-            "examples": [
-                "john_doe@example.com"
-            ]
-        },
-        "password": {
-            "type": "string",
-            "default": "",
-            "title": "The password Schema",
-            "examples": [
-                "password123"
-            ]
-        },
-        "name": {
-            "type": "string",
-            "default": "",
-            "title": "The name Schema",
-            "examples": [
-                "John Doe"
-            ]
-        },
-        "profile": {
+        "user": {
             "type": "object",
             "default": {},
-            "title": "The profile Schema",
+            "title": "The user Schema",
             "required": [
-                "mobile"
+                "username",
+                "email",
+                "password",
+                "name"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The username Schema",
+                    "examples": [
+                        "vimit"
+                    ]
+                },
+                "email": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The email Schema",
+                    "examples": [
+                        "vimit@admin.com"
+                    ]
+                },
+                "password": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The password Schema",
+                    "examples": [
+                        "1234"
+                    ]
+                },
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The name Schema",
+                    "examples": [
+                        "Vimit"
+                    ]
+                }
+            },
+            "examples": [{
+                "username": "vimit",
+                "email": "vimit@admin.com",
+                "password": "1234",
+                "name": "Vimit"
+            }]
+        },
+        "aws_user": {
+            "type": "object",
+            "default": {},
+            "title": "The aws_user Schema",
+            "required": [
+                "mobile",
+                "login_status"
             ],
             "properties": {
                 "mobile": {
@@ -57,22 +76,439 @@
                     "default": "",
                     "title": "The mobile Schema",
                     "examples": [
-                        "9971572155"
+                        "9999999999"
+                    ]
+                },
+                "login_status": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The login_status Schema",
+                    "examples": [
+                        true
                     ]
                 }
             },
             "examples": [{
-                "mobile": "9971572155"
+                "mobile": "9999999999",
+                "login_status": true
+            }]
+        },
+        "role_id": {
+            "type": "object",
+            "default": {},
+            "title": "The role_id Schema",
+            "required": [
+                "role_name",
+                "role_status"
+            ],
+            "properties": {
+                "role_name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The role_name Schema",
+                    "examples": [
+                        "admin"
+                    ]
+                },
+                "role_status": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The role_status Schema",
+                    "examples": [
+                        true
+                    ]
+                }
+            },
+            "examples": [{
+                "role_name": "admin",
+                "role_status": true
+            }]
+        },
+        "user_screen": {
+            "type": "object",
+            "default": {},
+            "title": "The user_screen Schema",
+            "required": [
+                "screens"
+            ],
+            "properties": {
+                "screens": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The screens Schema",
+                    "required": [
+                        "S3",
+                        "EC2",
+                        "RDS",
+                        "Lambda",
+                        "Route53"
+                    ],
+                    "properties": {
+                        "S3": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The S3 Schema",
+                            "items": {
+                                "type": "string",
+                                "title": "A Schema",
+                                "examples": [
+                                    "Create Bucket",
+                                    "Manage Buckets",
+                                    "Upload Objects",
+                                    "Download Objects",
+                                    "Permissions",
+                                    "Lifecycle Policies",
+                                    "Versioning",
+                                    "Static Website Hosting",
+                                    "Logging",
+                                    "Cross-Region Replication"
+                                ]
+                            },
+                            "examples": [
+                                ["Create Bucket",
+                                    "Manage Buckets",
+                                    "Upload Objects",
+                                    "Download Objects",
+                                    "Permissions",
+                                    "Lifecycle Policies",
+                                    "Versioning",
+                                    "Static Website Hosting",
+                                    "Logging",
+                                    "Cross-Region Replication"
+                                ]
+                            ]
+                        },
+                        "EC2": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The EC2 Schema",
+                            "items": {
+                                "type": "string",
+                                "title": "A Schema",
+                                "examples": [
+                                    "Launch Instances",
+                                    "Manage Instances",
+                                    "Security Groups",
+                                    "Key Pairs",
+                                    "Elastic IP Addresses",
+                                    "Instance Metadata",
+                                    "Instance Storage",
+                                    "Instance Types",
+                                    "Tags",
+                                    "Monitoring"
+                                ]
+                            },
+                            "examples": [
+                                ["Launch Instances",
+                                    "Manage Instances",
+                                    "Security Groups",
+                                    "Key Pairs",
+                                    "Elastic IP Addresses",
+                                    "Instance Metadata",
+                                    "Instance Storage",
+                                    "Instance Types",
+                                    "Tags",
+                                    "Monitoring"
+                                ]
+                            ]
+                        },
+                        "RDS": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The RDS Schema",
+                            "items": {
+                                "type": "string",
+                                "title": "A Schema",
+                                "examples": [
+                                    "Create DB Instance",
+                                    "Manage DB Instances",
+                                    "Snapshots",
+                                    "Security Groups",
+                                    "Parameter Groups",
+                                    "Encryption",
+                                    "Backup and Restore",
+                                    "Monitoring",
+                                    "Read Replicas",
+                                    "Performance Insights"
+                                ]
+                            },
+                            "examples": [
+                                ["Create DB Instance",
+                                    "Manage DB Instances",
+                                    "Snapshots",
+                                    "Security Groups",
+                                    "Parameter Groups",
+                                    "Encryption",
+                                    "Backup and Restore",
+                                    "Monitoring",
+                                    "Read Replicas",
+                                    "Performance Insights"
+                                ]
+                            ]
+                        },
+                        "Lambda": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The Lambda Schema",
+                            "items": {
+                                "type": "string",
+                                "title": "A Schema",
+                                "examples": [
+                                    "Create Function",
+                                    "Manage Functions",
+                                    "Function Triggers",
+                                    "Environment Variables",
+                                    "Concurrency",
+                                    "Permissions",
+                                    "Logging",
+                                    "Monitoring",
+                                    "Testing"
+                                ]
+                            },
+                            "examples": [
+                                ["Create Function",
+                                    "Manage Functions",
+                                    "Function Triggers",
+                                    "Environment Variables",
+                                    "Concurrency",
+                                    "Permissions",
+                                    "Logging",
+                                    "Monitoring",
+                                    "Testing"
+                                ]
+                            ]
+                        },
+                        "Route53": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The Route53 Schema",
+                            "items": {
+                                "type": "string",
+                                "title": "A Schema",
+                                "examples": [
+                                    "Create Hosted Zone",
+                                    "Manage Hosted Zones",
+                                    "Domain Registration",
+                                    "Record Sets",
+                                    "Health Checks",
+                                    "Traffic Flow Policies",
+                                    "Resolver Endpoints",
+                                    "DNSSEC",
+                                    "Routing Policies",
+                                    "Monitoring"
+                                ]
+                            },
+                            "examples": [
+                                ["Create Hosted Zone",
+                                    "Manage Hosted Zones",
+                                    "Domain Registration",
+                                    "Record Sets",
+                                    "Health Checks",
+                                    "Traffic Flow Policies",
+                                    "Resolver Endpoints",
+                                    "DNSSEC",
+                                    "Routing Policies",
+                                    "Monitoring"
+                                ]
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "S3": ["Create Bucket",
+                            "Manage Buckets",
+                            "Upload Objects",
+                            "Download Objects",
+                            "Permissions",
+                            "Lifecycle Policies",
+                            "Versioning",
+                            "Static Website Hosting",
+                            "Logging",
+                            "Cross-Region Replication"
+                        ],
+                        "EC2": ["Launch Instances",
+                            "Manage Instances",
+                            "Security Groups",
+                            "Key Pairs",
+                            "Elastic IP Addresses",
+                            "Instance Metadata",
+                            "Instance Storage",
+                            "Instance Types",
+                            "Tags",
+                            "Monitoring"
+                        ],
+                        "RDS": ["Create DB Instance",
+                            "Manage DB Instances",
+                            "Snapshots",
+                            "Security Groups",
+                            "Parameter Groups",
+                            "Encryption",
+                            "Backup and Restore",
+                            "Monitoring",
+                            "Read Replicas",
+                            "Performance Insights"
+                        ],
+                        "Lambda": [
+                            "Create Function",
+                            "Manage Functions",
+                            "Function Triggers",
+                            "Environment Variables",
+                            "Concurrency",
+                            "Permissions",
+                            "Logging",
+                            "Monitoring",
+                            "Testing"
+                        ],
+                        "Route53": [
+                            "Create Hosted Zone",
+                            "Manage Hosted Zones",
+                            "Domain Registration",
+                            "Record Sets",
+                            "Health Checks",
+                            "Traffic Flow Policies",
+                            "Resolver Endpoints",
+                            "DNSSEC",
+                            "Routing Policies",
+                            "Monitoring"
+                        ]
+                    }]
+                }
+            },
+            "examples": [{
+                "screens": {
+                    "S3": ["Create Bucket",
+                        "Manage Buckets",
+                        "Upload Objects",
+                        "Download Objects",
+                        "Permissions",
+                        "Lifecycle Policies",
+                        "Versioning",
+                        "Static Website Hosting",
+                        "Logging",
+                        "Cross-Region Replication"
+                    ],
+                    "EC2": ["Launch Instances",
+                        "Manage Instances",
+                        "Security Groups",
+                        "Key Pairs",
+                        "Elastic IP Addresses",
+                        "Instance Metadata",
+                        "Instance Storage",
+                        "Instance Types",
+                        "Tags",
+                        "Monitoring"
+                    ],
+                    "RDS": ["Create DB Instance",
+                        "Manage DB Instances",
+                        "Snapshots",
+                        "Security Groups",
+                        "Parameter Groups",
+                        "Encryption",
+                        "Backup and Restore",
+                        "Monitoring",
+                        "Read Replicas",
+                        "Performance Insights"
+                    ],
+                    "Lambda": [
+                        "Create Function",
+                        "Manage Functions",
+                        "Function Triggers",
+                        "Environment Variables",
+                        "Concurrency",
+                        "Permissions",
+                        "Logging",
+                        "Monitoring",
+                        "Testing"
+                    ],
+                    "Route53": [
+                        "Create Hosted Zone",
+                        "Manage Hosted Zones",
+                        "Domain Registration",
+                        "Record Sets",
+                        "Health Checks",
+                        "Traffic Flow Policies",
+                        "Resolver Endpoints",
+                        "DNSSEC",
+                        "Routing Policies",
+                        "Monitoring"
+                    ]
+                }
             }]
         }
     },
     "examples": [{
-        "username": "john_doe",
-        "email": "john_doe@example.com",
-        "password": "password123",
-        "name": "John Doe",
-        "profile": {
-            "mobile": "9971572155"
+        "user": {
+            "username": "vimit",
+            "email": "vimit@admin.com",
+            "password": "1234",
+            "name": "Vimit"
+        },
+        "aws_user": {
+            "mobile": "9999999999",
+            "login_status": true
+        },
+        "role_id": {
+            "role_name": "admin",
+            "role_status": true
+        },
+        "user_screen": {
+            "screens": {
+                "S3": ["Create Bucket",
+                    "Manage Buckets",
+                    "Upload Objects",
+                    "Download Objects",
+                    "Permissions",
+                    "Lifecycle Policies",
+                    "Versioning",
+                    "Static Website Hosting",
+                    "Logging",
+                    "Cross-Region Replication"
+                ],
+                "EC2": ["Launch Instances",
+                    "Manage Instances",
+                    "Security Groups",
+                    "Key Pairs",
+                    "Elastic IP Addresses",
+                    "Instance Metadata",
+                    "Instance Storage",
+                    "Instance Types",
+                    "Tags",
+                    "Monitoring"
+                ],
+                "RDS": ["Create DB Instance",
+                    "Manage DB Instances",
+                    "Snapshots",
+                    "Security Groups",
+                    "Parameter Groups",
+                    "Encryption",
+                    "Backup and Restore",
+                    "Monitoring",
+                    "Read Replicas",
+                    "Performance Insights"
+                ],
+                "Lambda": [
+                    "Create Function",
+                    "Manage Functions",
+                    "Function Triggers",
+                    "Environment Variables",
+                    "Concurrency",
+                    "Permissions",
+                    "Logging",
+                    "Monitoring",
+                    "Testing"
+                ],
+                "Route53": [
+                    "Create Hosted Zone",
+                    "Manage Hosted Zones",
+                    "Domain Registration",
+                    "Record Sets",
+                    "Health Checks",
+                    "Traffic Flow Policies",
+                    "Resolver Endpoints",
+                    "DNSSEC",
+                    "Routing Policies",
+                    "Monitoring"
+                ]
+            }
         }
     }]
 }

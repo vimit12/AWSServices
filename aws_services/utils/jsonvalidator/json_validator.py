@@ -7,6 +7,7 @@ __author__ = "Vimit"
 __version__ = "0.1.0"
 
 import json
+from django.conf import settings
 import os
 
 import jsonschema

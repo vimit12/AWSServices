@@ -15,8 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from ..utils.authenticate.authentication import TokenGeneration
-from ..utils.constants import (
+from utils.authenticate.authentication import TokenGeneration
+from utils.constants import (
     RESPONSE_DATA,
     USER_AUTH_FAIL,
     USER_CREATED,
@@ -27,13 +27,17 @@ from ..utils.constants import (
     USER_NOT_FOUND,
     USER_UPDATED,
 )
-from ..utils.DRF_Classes.custom_authentication_classes import AWSUserAuthentication
-from ..utils.jsonvalidator.json_validator import CustomJsonValidator
-from ..utils.serializers import init_service_serializer
+from utils.DRF_Classes.custom_authentication_classes import (
+    AWSUserAuthentication,
+    AWSUserRefreshToke,
+)
+from utils.jsonvalidator.json_validator import CustomJsonValidator
+from utils.serializers import init_service_serializer
 
 from .models import *
 
 __APP_NAME__ = "init_services"
+
 
 # Define an API view for username
 class UserNameAPI(APIView):
@@ -46,7 +50,7 @@ class UserNameAPI(APIView):
         print(_data)
 
         # Define a response data dictionary with default values
-        response_data = RESPONSE_DATA
+        response_data = copy.copy(RESPONSE_DATA)
 
         try:
             _user_obj = AWSUser.objects.filter(user__username=_data.get("username"))
@@ -78,10 +82,10 @@ class SignUp(APIView):
     def post(self, request):
         # Get the request data
         _data = request.data
-        print(_data)
+        # print(_data)
 
         # Define a response data dictionary with default values
-        response_data = RESPONSE_DATA
+        response_data = copy.copy(RESPONSE_DATA)
 
         try:
             with transaction.atomic():
@@ -93,39 +97,46 @@ class SignUp(APIView):
                 # Validate the JSON data using the CustomJsonValidator
                 obj = CustomJsonValidator(schema_file_name, _data, __APP_NAME__)
                 schema_status, msg = obj.flag, obj.message
-
+                print(schema_status, msg)
                 # If the JSON data is valid according to the schema
                 if schema_status:
                     # Extract the name field from the data and split it into first and last name
-                    name = _data.pop("name").split(" ")
-                    _data.update(
+                    name = _data["user"].pop("name").split(" ")
+                    _data["user"].update(
                         {"first_name": name[0], "last_name": " ".join(name[1:])}
                     )
+                    aws_user = _data.pop("aws_user")
+                    user = _data.pop("user")
 
-                    # Serialize the data using the UserSerializer
-                    serializer = connect_serializer.UserSerializer(data=_data)
-                    # If the data is valid according to the serializer
-                    if serializer.is_valid():
-                        # Save the user object
-                        user = serializer.save()
+                    screen = UserScreens.objects.create(
+                        user_screen=_data["user_screen"]
+                    )
 
-                        # Update the response data with a success message and status code
-                        response_data.update(
-                            {
-                                "message": USER_CREATED,
-                                "status_code": HTTPStatus.OK,
-                            }
-                        )
-                    else:
-                        # Update the response data with validation errors
-                        # and a status code indicating a bad request
-                        print(serializer.errors)
-                        response_data.update(
-                            {
-                                "error": serializer.errors,
-                                "status_code": HTTPStatus.BAD_REQUEST,
-                            }
-                        )
+                    role_data = _data.pop("role_id")
+                    role_data["screens"] = screen
+
+                    role_id = Role.objects.create(**role_data)
+
+                    # Extract password data from validated_data if present
+                    password = user.pop("password", None)
+
+                    user = User.objects.create(**user)
+
+                    # If password is present, set it using Django's default set_password() method
+                    if password:
+                        user.set_password(password)
+                        user.save()
+
+                    aws_user.update({"user": user, "role_id": role_id})
+
+                    AWSUser.objects.create(**aws_user)
+
+                    response_data.update(
+                        {
+                            "message": USER_CREATED,
+                            "status_code": HTTPStatus.OK,
+                        }
+                    )
                 else:
                     # Update the response data with the validation error message
                     # and a status code indicating a bad request
@@ -162,7 +173,7 @@ class LoginAPI(APIView):
         print(_data)
 
         # Define a response data dictionary with default values
-        response_data = RESPONSE_DATA
+        response_data = copy.copy(RESPONSE_DATA)
 
         try:
             with transaction.atomic():
@@ -172,7 +183,7 @@ class LoginAPI(APIView):
                 # Define the schema file name
                 schema_file_name = "login.json"
                 # Validate the JSON data using the CustomJsonValidator
-                obj = CustomJsonValidator(schema_file_name, _data)
+                obj = CustomJsonValidator(schema_file_name, _data, __APP_NAME__)
                 schema_status, msg = obj.flag, obj.message
 
                 # If the JSON data is valid according to the schema
@@ -181,7 +192,7 @@ class LoginAPI(APIView):
                         username=_data.get("username"), password=_data.get("password")
                     )
                     if user:
-                        _user_obj = ConnectMeUser.objects.get(
+                        _user_obj = AWSUser.objects.get(
                             user__username=_data.get("username"), deleted_at=None
                         )
                         if _user_obj:
@@ -252,13 +263,12 @@ class LogoutAPI(APIView):
     def get(self, request) -> RESPONSE_DATA:
         _user_obj = request._auth
         # Define a response data dictionary with default values
-        response_data = RESPONSE_DATA
+        response_data = copy.copy(RESPONSE_DATA)
 
         try:
             with transaction.atomic():
                 # Create a savepoint for the transaction
                 savepoint_id = transaction.savepoint()
-
                 if _user_obj:
                     _user_obj.access_token = None
                     _user_obj.refresh_token = None
@@ -268,6 +278,63 @@ class LogoutAPI(APIView):
 
                     response_data.update(
                         {"message": USER_LOGGED_OUT, "status_code": HTTPStatus.OK}
+                    )
+                else:
+                    response_data.update(
+                        {
+                            "error": USER_AUTH_FAIL,
+                            "status_code": HTTPStatus.UNAUTHORIZED,
+                        }
+                    )
+
+        except Exception as e:
+            # Rollback the transaction to the savepoint in case of an exception
+            transaction.savepoint_rollback(savepoint_id)
+
+            # Log the error
+            print(f"An error occurred: {str(e)}")
+            response_data.update(
+                {"error": str(e), "status_code": HTTPStatus.INTERNAL_SERVER_ERROR}
+            )
+        else:
+            # Commit the transaction if no exceptions occurred
+            transaction.commit()
+
+        # Return a JsonResponse with the response data
+        return JsonResponse(response_data)
+
+
+class RefreshTokeAPI(APIView):
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        AWSUserRefreshToke,
+    ]
+
+    def get(self, request) -> RESPONSE_DATA:
+        _user_obj = request._auth
+        # Define a response data dictionary with default values
+        response_data = copy.copy(RESPONSE_DATA)
+
+        try:
+            with transaction.atomic():
+                # Create a savepoint for the transaction
+                savepoint_id = transaction.savepoint()
+                if _user_obj:
+                    access_token = TokenGeneration.generate_access_token()
+                    refresh_token = TokenGeneration.generate_refresh_token()
+
+                    _user_obj.access_token = access_token
+                    _user_obj.refresh_token = refresh_token
+                    _user_obj.updated_at = timezone.now()
+                    _user_obj.login_status = True
+                    _user_obj.save()
+
+                    _user_data = _user_obj._get_detail
+
+                    response_data.update(
+                        {"message": _user_data, "status_code": HTTPStatus.OK}
                     )
                 else:
                     response_data.update(
